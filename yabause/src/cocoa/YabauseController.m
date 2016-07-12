@@ -126,7 +126,7 @@ static void FlipToggle(NSMenuItem *item) {
 - (IBAction)runISO:(id)sender
 {
     NSOpenPanel *p = [NSOpenPanel openPanel];
-    NSArray *types = [NSArray arrayWithObjects:@"iso", @"cue", nil];
+    NSArray *types = [NSArray arrayWithObjects:@"iso", @"cue", @"mds", @"ccd", nil];
 
     [p setAllowedFileTypes:types];
     if([p runModal] == NSFileHandlingPanelOKButton) {
@@ -241,7 +241,7 @@ static void FlipToggle(NSMenuItem *item) {
 - (void)startEmulationWithCDCore:(int)cdcore CDPath:(const char *)fn
 {
     if(!_running) {
-        yabauseinit_struct yinit;
+		yabauseinit_struct yinit = {0};
         int initok;
         NSString *bios = [prefs biosPath];
         NSString *mpeg = [prefs mpegPath];
