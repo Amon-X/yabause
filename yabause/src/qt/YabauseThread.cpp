@@ -382,7 +382,9 @@ void YabauseThread::reloadSettings()
 	mYabauseConf.modemport = strdup( vs->value( "Cartridge/ModemPort", mYabauseConf.modemport ).toString().toLatin1().constData() );
 	mYabauseConf.videoformattype = vs->value( "Video/VideoFormat", mYabauseConf.videoformattype ).toInt();
    mYabauseConf.use_new_scsp = (int)vs->value("Sound/NewScsp", mYabauseConf.use_new_scsp).toBool();
-	
+   mYabauseConf.use_scsp_dsp_dynarec = (int)vs->value("Sound/EnableScspDspDynarec", mYabauseConf.use_scsp_dsp_dynarec).toBool();
+   mYabauseConf.use_scu_dsp_jit = (int)vs->value("Advanced/EnableScuDspDynarec", mYabauseConf.use_scu_dsp_jit).toBool();
+
 	emit requestSize( QSize( vs->value( "Video/WinWidth", 0 ).toInt(), vs->value( "Video/WinHeight", 0 ).toInt() ) );
 	emit requestFullscreen( vs->value( "Video/Fullscreen", false ).toBool() );
 	emit requestVolumeChange( vs->value( "Sound/Volume", 100 ).toInt() );
@@ -408,7 +410,7 @@ void YabauseThread::resetYabauseConf()
 	// free structure
 	memset( &mYabauseConf, 0, sizeof( yabauseinit_struct ) );
 	// fill default structure
-	mYabauseConf.m68kcoretype = M68KCORE_C68K;
+	mYabauseConf.m68kcoretype = M68KCORE_MUSASHI;
 	mYabauseConf.percoretype = QtYabause::defaultPERCore().id;
 	mYabauseConf.sh1coretype = SH2CORE_DEFAULT;
 	mYabauseConf.use_cd_block_lle = 0;

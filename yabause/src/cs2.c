@@ -1630,10 +1630,13 @@ void Cs2PlayDisc(void) {
   else if (pdepos != 0)
   {
      // Track Mode
-     if ((pdepos & 0xFF) == 0)
+
+     // Normally if Sub-track index is out of range it should use 99. 
+     // Unfortunately we're not handling sub-track indexes.
+     //if ((pdepos & 0xFF) == 0) 
         Cs2Area->playendFAD = Cs2TrackToFAD((u16)(pdepos | 0x0063));
-     else
-        Cs2Area->playendFAD = Cs2TrackToFAD((u16)pdepos);
+     //else
+     //   Cs2Area->playendFAD = Cs2TrackToFAD((u16)pdepos);
   }
   else
   {
