@@ -1,10 +1,10 @@
-find_program(NDK_BUILD ndk-build)
+find_program(NDK_BUILD ndk-build PATHS $ENV{ANDROID_NDK_HOME})
 
 if(NOT NDK_BUILD)
     message(FATAL_ERROR "ndk build not found, bye")
 endif()
 
-find_program(SDK_ANDROID android)
+find_program(SDK_ANDROID android PATHS $ENV{ANDROID_HOME} PATH_SUFFIXES tools)
 
 if(NOT SDK_ANDROID)
     message(FATAL_ERROR "sdk android tool not found, bye")
@@ -86,6 +86,12 @@ configure_file(
 )
 
 configure_file(
+	${CMAKE_CURRENT_SOURCE_DIR}/jni/Application.mk.in
+	${CMAKE_CURRENT_BINARY_DIR}/jni/Application.mk
+	@ONLY
+)
+
+configure_file(
        ${CMAKE_CURRENT_SOURCE_DIR}/gradle.properties.in
        ${CMAKE_CURRENT_BINARY_DIR}/gradle.properties
        @ONLY
@@ -108,7 +114,7 @@ add_custom_command(
 )
 
 add_custom_command(
-	OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/libs/armeabi/libyabause.so"
+	OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/libs/${ANDROID_ABI}/libyabause.so"
 	COMMAND "${NDK_BUILD}"
 	DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/jni/libyabause.a"
 	DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/jni/yui.c"
@@ -167,11 +173,12 @@ set(yabause_android_GRADLEW
 add_custom_command(
 	OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/build/outputs/apk/Yabause-release.apk"
 	COMMAND "${CMAKE_CURRENT_BINARY_DIR}/gradlew" build
-	DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/libs/armeabi/libyabause.so"
+	DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/libs/${ANDROID_ABI}/libyabause.so"
 	DEPENDS ${yabause_android_SRC}
 	DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/gradle.properties"
 	DEPENDS ${yabause_android_RES}
 	DEPENDS ${yabause_android_GRADLEW}
+	DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/jni/Application.mk"
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 
